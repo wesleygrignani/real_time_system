@@ -13,14 +13,14 @@ void wait(unsigned timeout)
 // sensor de gas a 400m
 int p1_s1_gas(){
     //deve ter 20ms de atraso
-    wait(2000);
+    wait(20);
     return 1;
 }
 
 // sensor de gas a 800m
 int p1_s2_gas(){
     //deve ter 40ms de atraso
-    wait(400);
+    wait(40);
     return 1;
 }
 
@@ -50,9 +50,9 @@ int main(int argc, char const *argv[])
         bool stat3 = p1_s3_gas(); //60ms
 
         unsigned finish_time = clock(); // tempo depois de realizar as requisições dos sensores
-        unsigned delay = 500 - (finish_time - init_time);
+        unsigned delay = 500 - (finish_time - init_time); // compensação de tempo para o time do display
 
-        if (finish_time - init_time < 500){
+        if (finish_time - init_time < 500){ // verifica se o tempo de leitura dos sensores passou do tempo de atualização do display 
             display(stat1,stat2,stat3,delay);
         }else{
             cout<<"\nTempo maximo de atualizacao do display exedido";
