@@ -31,8 +31,8 @@ int p1_s3_gas(){
     return 1;
 }
 
-void display(bool stat1, bool stat2, bool stat3, unsigned delay){
-    wait(delay);
+void display(bool stat1, bool stat2, bool stat3){
+    wait(500);
     cout<<"\nSensor 1:"<<stat1;
     cout<<"\nSensor 2:"<<stat2;
     cout<<"\nSensor 3:"<<stat3;
@@ -50,13 +50,10 @@ int main(int argc, char const *argv[])
         bool stat3 = p1_s3_gas(); //60ms
 
         unsigned finish_time = clock(); // tempo depois de realizar as requisições dos sensores
-        unsigned delay = 500 - (finish_time - init_time); // compensação de tempo para o time do display
 
-        if (finish_time - init_time < 500){ // verifica se o tempo de leitura dos sensores passou do tempo de atualização do display 
-            display(stat1,stat2,stat3,delay);
-        }else{
-            cout<<"\nTempo maximo de atualizacao do display exedido";
-        }
+        display(stat1,stat2,stat3);
+
+        
         
     }
 
