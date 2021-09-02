@@ -57,59 +57,63 @@ int posso(){
     return 1;
 }
 
-void display(bool stat0,bool stat1, bool stat2, bool stat3){
+void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo_stat1, bool oleo_stat2, bool oleo_stat3){
     wait(500);
     cout<<"\nSensor 0:"<<stat0;
-    cout<<"\nSensor 1:"<<stat1;
-    cout<<"\nSensor 2:"<<stat2;
-    cout<<"\nSensor 3:"<<stat3;
+    cout<<"\nSensor 1:"<<gas_stat1;
+    cout<<"\nSensor 2:"<<gas_stat2;
+    cout<<"\nSensor 3:"<<gas_stat3;
+
+    cout<<"\nSensor 1:"<<oleo_stat1;
+    cout<<"\nSensor 2:"<<oleo_stat2;
+    cout<<"\nSensor 3:"<<oleo_stat3;
 }
 
-//Main
+
 int main(int argc, char const *argv[])
 {
     while(true){
 
         unsigned init_time = clock(); // tempo antes de realizar as requisições dos sensores
 
-        //Bloco do posso 1 Gas
+        //Bloco do posso 1
         bool P1_stat0 = posso();
-        bool P1_stat1 = p_s1_gas(); //20ms
-        bool P1_stat2 = p_s2_gas(); //40ms
-        bool P1_stat3 = p_s3_gas(); //60ms
-        //Bloco do posso 1 oleo
 
-        bool P1_stat1 = p_s1_oleo(); //20ms
-        bool P1_stat2 = p_s2_oleo(); //40ms
-        bool P1_stat3 = p_s3_oleo(); //60ms
+        bool P1_gas_stat1 = p_s1_gas(); //20ms
+        bool P1_gas_stat2 = p_s2_gas(); //40ms
+        bool P1_gas_stat3 = p_s3_gas(); //60ms
+
+        bool P1_oleo_stat1 = p_s1_oleo(); //20ms
+        bool P1_oleo_stat2 = p_s2_oleo(); //40ms
+        bool P1_oleo_stat3 = p_s3_oleo(); //60ms
 
         //Bloco do posso 2 Gas
         bool P2_stat0 = posso();
-        bool P2_stat1 = p_s1_gas(); //20ms
-        bool P2_stat2 = p_s2_gas(); //40ms
-        bool P2_stat3 = p_s3_gas(); //60ms
-        //Bloco do posso 2 Oleo
-        bool P2_stat0 = posso();
-        bool P2_stat1 = p_s1_oleo(); //20ms
-        bool P2_stat2 = p_s2_oleo(); //40ms
-        bool P2_stat3 = p_s3_oleo(); //60ms
+
+        bool P2_gas_stat1 = p_s1_gas(); //20ms
+        bool P2_gas_stat2 = p_s2_gas(); //40ms
+        bool P2_gas_stat3 = p_s3_gas(); //60ms
+
+        bool P2_oleo_stat1 = p_s1_oleo(); //20ms
+        bool P2_oleo_stat2 = p_s2_oleo(); //40ms
+        bool P2_oleo_stat3 = p_s3_oleo(); //60ms
 
         //Bloco do posso 3 Gas
-        bool P2_stat0 = posso();
-        bool P2_stat1 = p_s1_gas(); //20ms
-        bool P2_stat2 = p_s2_gas(); //40ms
-        bool P2_stat3 = p_s3_gas(); //60ms
-        //Bloco do posso 3 Oleo
+        bool P3_stat0 = posso();
 
-        bool P2_stat1 = p_s1_oleo(); //20ms
-        bool P2_stat2 = p_s2_oleo(); //40ms
-        bool P2_stat3 = p_s3_oleo(); //60ms
+        bool P3_gas_stat1 = p_s1_gas(); //20ms
+        bool P3_gas_stat2 = p_s2_gas(); //40ms
+        bool P3_gas_stat3 = p_s3_gas(); //60ms
+
+        bool P3_oleo_stat1 = p_s1_oleo(); //20ms
+        bool P3_oleo_stat2 = p_s2_oleo(); //40ms
+        bool P3_oleo_stat3 = p_s3_oleo(); //60ms
 
         unsigned finish_time = clock(); // tempo depois de realizar as requisições dos sensores
 
-        display(P1_stat0,P1_stat1,P1_stat2,P1_stat3);
-        display(P2_stat0,P2_stat1,P2_stat2,P2_stat3);
-        display(P3_stat0,P3_stat1,P3_stat2,P3_stat3);
+        display(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3);
+        display(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3);
+        display(P3_stat0,P3_gas_stat1,P3_gas_stat2,P3_gas_stat3,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3);
 
     }
 
