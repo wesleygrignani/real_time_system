@@ -65,7 +65,7 @@ void display(bool stat0,bool stat1, bool stat2, bool stat3){
     cout<<"\nSensor 3:"<<stat3;
 }
 
-
+//Main
 int main(int argc, char const *argv[])
 {
     while(true){
