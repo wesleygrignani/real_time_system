@@ -1,6 +1,8 @@
 #include <iostream>
 #include <windows.h>
 #include <time.h>
+
+
 using namespace std;
 
 void wait(unsigned timeout)
@@ -57,10 +59,10 @@ int posso(){
     return 0;
 }
 
-void display_1(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo_stat1, bool oleo_stat2, bool oleo_stat3){
+void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo_stat1, bool oleo_stat2, bool oleo_stat3,int NUM){
     wait(500);
-    cout<<"\nPOÇO  1: "<<endl;
-    cout<<"\nSensor POÇO 1: "<<stat0;
+    cout<<"\n\n\nPOÇO   "<<NUM;
+    cout<<"\nSensor POÇO  "<<NUM<<" :"<<stat0;
     cout<<"\nSensor GAS   1: "<<gas_stat1;
     cout<<"\nSensor GAS   2: "<<gas_stat2;
     cout<<"\nSensor GAS   3: "<<gas_stat3;
@@ -68,31 +70,6 @@ void display_1(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool ol
     cout<<"\nSensor OLEO  1: "<<oleo_stat1;
     cout<<"\nSensor OLEO  2: "<<oleo_stat2;
     cout<<"\nSensor OLEO  3: "<<oleo_stat3;
-}
-void display_2(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo_stat1, bool oleo_stat2, bool oleo_stat3){
-    wait(500);
-    cout<<"\n\n\nPOÇO  2: "<<endl;
-    cout<<"\nSensor POÇO 2: "<<stat0;
-    cout<<"\nSensor GAS   1: "<<gas_stat1;
-    cout<<"\nSensor GAS   2: "<<gas_stat2;
-    cout<<"\nSensor GAS   3: "<<gas_stat3;
-
-    cout<<"\nSensor OLEO  1: "<<oleo_stat1;
-    cout<<"\nSensor OLEO  2: "<<oleo_stat2;
-    cout<<"\nSensor OLEO  3: "<<oleo_stat3;
-}
-
-void display_3(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo_stat1, bool oleo_stat2, bool oleo_stat3){
-    wait(500);
-    cout<<"\n\n\nPOÇO  3: "<<endl;
-    cout<<"\nSensor POÇO 3: "<<stat0;
-    cout<<"\nSensor GAS   1: "<<gas_stat1;
-    cout<<"\nSensor GAS   2: "<<gas_stat2;
-    cout<<"\nSensor GAS   3: "<<gas_stat3;
-
-    cout<<"\nSensor OLEO  1: "<<oleo_stat1;
-    cout<<"\nSensor OLEO  2: "<<oleo_stat2;
-    cout<<"\nSensor OLEO  3: "<<oleo_stat3<<"\n\n\n";
 }
 
 
@@ -138,12 +115,10 @@ int main(int argc, char const *argv[])
 
         unsigned finish_time = clock(); // tempo depois de realizar as requisições dos sensores
 
-        display_1(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3);
-        display_2(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3);
-        display_3(P3_stat0,P3_gas_stat1,P3_gas_stat2,P3_gas_stat3,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3);
+        display(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3,1);
+        display(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3,2);
+        display(P3_stat0,P3_gas_stat1,P3_gas_stat2,P3_gas_stat3,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3,3);
 
-        //wait(1000);
-        //system("cls");
     }
 
     return 0;
