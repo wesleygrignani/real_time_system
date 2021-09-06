@@ -386,7 +386,7 @@ void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo
     cout<<"| Sensor GAS   1 :   "<<gas_stat1<<"     |";
     if(gas_stat1){
         gotoxy(32,p+2);
-        cout<<"INSTABILIDADE DETECTADA! PRESSÃO AJUSTADA PELO SISTEMA  ";
+        cout<<"INSTABILIDADE DETECTADA! CONTRAMEDIDA: AJUSTE DE PRESSÃO APLICADO   ";
     }
     else if(stat0){
         gotoxy(32,p+2);
@@ -461,21 +461,14 @@ void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo
         cout<<"                                                        ";
 }
 
+//Não sei se precisaria disso mas é uma sub rotina pra informar o sistema pra ajustar a pressão
 bool contramedida(bool s0,bool s1,bool s2,bool s3){
  bool check = false;
     if(s0 || s1 || s2 || s3){
         check = true;
     }
-
-    if(check){
-        gotoxy(3,1);
-        cout<<"INSTABILIDADE DETECTADA!";
-    }
-    else{
-        gotoxy(3,1);
-        cout<<"                            ";
-    }
-        wait(20);
+    //wait(20);
+    return check;
 }
 
 int main(int argc, char const *argv[])
@@ -491,52 +484,61 @@ int main(int argc, char const *argv[])
     {
         unsigned init_time = clock(); // tempo antes de realizar as requisições dos sensores
 
-        //Bloco do posso 1
+        //Bloco do poço 1
         bool P1_stat0 = poco(1); // 75ms
         bool P1_gas_stat1 = p_s1_gas(1);// 55 ms
         bool P1_gas_stat2 = p_s2_gas(1); // 35 ms
         bool P1_gas_stat3 = p_s3_gas(1); // 15 ms
         //somando
-        contramedida(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3);
+        bool check_p1_gas = contramedida(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3);
 
-        P1_stat0 = poco(1); // 75ms
         bool P1_oleo_stat1 = p_s1_oleo(1); // 55 ms
         bool P1_oleo_stat2 = p_s2_oleo(1); // 35 ms
         bool P1_oleo_stat3 = p_s3_oleo(1); // 15 ms
 
-        contramedida(P1_stat0,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3);
+        bool check_p1_oleo = contramedida(P1_stat0,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3);
 
-        //Bloco do posso 2 Gas
+        //Bloco do poço 2 Gas
         bool P2_stat0 = poco(2); // 75ms
         bool P2_gas_stat1 = p_s1_gas(2);// 55 ms
         bool P2_gas_stat2 = p_s2_gas(2); // 35 ms
         bool P2_gas_stat3 = p_s3_gas(2); // 15 ms
 
-        contramedida(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3);
+        bool check_p2_gas = contramedida(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3);
 
-        P2_stat0 = poco(2); // 75ms
         bool P2_oleo_stat1 = p_s1_oleo(2); // 55 ms
         bool P2_oleo_stat2 = p_s2_oleo(2); // 35 ms
         bool P2_oleo_stat3 = p_s3_oleo(2); // 15 ms
 
-        contramedida(P2_stat0,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3);
+        bool check_p2_oleo = contramedida(P2_stat0,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3);
 
-        //Bloco do posso 3 Gas
+        //Bloco do poço 3 Gas
         bool P3_stat0 = poco(3); // 75ms
         bool P3_gas_stat1 = p_s1_gas(3);// 55 ms
         bool P3_gas_stat2 = p_s2_gas(3); // 35 ms
         bool P3_gas_stat3 = p_s3_gas(3); // 15 ms
 
-        contramedida(P3_stat0,P3_gas_stat1,P3_gas_stat2,P3_gas_stat3);
+        bool check_p3_gas = contramedida(P3_stat0,P3_gas_stat1,P3_gas_stat2,P3_gas_stat3);
 
-        P3_stat0 = poco(3);
         bool P3_oleo_stat1 = p_s1_oleo(3); // 55 ms
         bool P3_oleo_stat2 = p_s2_oleo(3); // 35 ms
         bool P3_oleo_stat3 = p_s3_oleo(3); // 15 ms
 
-        contramedida(P3_stat0,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3);
+        bool check_p3_oleo = contramedida(P3_stat0,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3);
 
         unsigned finish_time = clock(); // tempo depois de realizar as requisições dos sensores
+        gotoxy(6,34);
+        cout<<"TEMPO DE EXECUÇÃO: "<<finish_time-init_time;
+
+        //informa se o sistema precisou aplicar alguma contramedida
+        if(check_p1_gas || check_p2_gas || check_p3_gas || check_p1_oleo || check_p2_oleo || check_p3_oleo){
+            gotoxy(5,1);
+            cout<<"DISTURBIO DETECTADO!      ";
+        }
+        else{
+            gotoxy(5,1);
+            cout<<"STATUS DO SISTEMA NORMAIS ";
+        }
 
         display(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3,1);
         display(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3,2);
