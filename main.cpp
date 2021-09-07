@@ -21,23 +21,27 @@ void wait(unsigned timeout) //Função de contagem de tempo do sistema
 // sensor de gas a 1100m DA CENTRAL
 int p_s1_gas(int p)
 {
+    wait(56);
     //trecho para simular um disturbio no duto de gas;
     char tecla;
     int amostra=-1;
 
+    fflush(stdin);
     if(kbhit()) //verifica se alguma tecla foi pressionada, caso contrario retorna 0
     {
         tecla = getch();
 
         switch(tecla)
         {
-        case 'q': //simular disturbio, detectação no sensor gas poço 1
+
+        case 'qw' || 'qa' ||'qz': //simular disturbio, detectação no sensor gas poço 1
             if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
                 amostra = 1;
             else
                 amostra = 0;
             break;
-        case 'qw': //simular disturbio, detectação no sensor gas poço 1
+
+        case 'q': //simular disturbio, detectação no sensor gas poço 1
             if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
                 amostra = 1;
             else
@@ -67,7 +71,7 @@ int p_s1_gas(int p)
         amostra = 0;
 
 //deve ter 20ms de atraso
-    wait(56);
+
      //wait(21);
     return amostra;
 }
@@ -75,24 +79,26 @@ int p_s1_gas(int p)
 // sensor de gas a 700m DA CENTRAL
 int p_s2_gas(int p)
 {
+    wait(36);
     //trecho para simular um disturbio no duto de gas;
     char tecla;
     int amostra=-1;
-
+    fflush(stdin);
     if(kbhit()) //verifica se alguma tecla foi pressionada, caso contrario retorna 0
     {
         tecla = getch();
 
         switch(tecla)
         {
-        case 'w': //simular disturbio, detectação no sensor gas poço 1
+
+        case 'qw': //simular disturbio, detectação no sensor gas poço 1
             if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
                 amostra = 1;
             else
                 amostra = 0;
             break;
 
-        case 'qw': //simular disturbio, detectação no sensor gas poço 1
+        case 'w': //simular disturbio, detectação no sensor gas poço 1
             if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
                 amostra = 1;
             else
@@ -122,7 +128,6 @@ int p_s2_gas(int p)
         amostra = 0;
 
     //deve ter 40ms de atraso
-    wait(36);
      //wait(21);
     return amostra;
 }
@@ -130,10 +135,11 @@ int p_s2_gas(int p)
 // sensor de gas a 300m DA CENTRAL
 int p_s3_gas(int p)
 {
+    wait(16);
     //trecho para simular um disturbio no duto de gas;
     char tecla;
     int amostra=-1;
-
+    fflush(stdin);
     if(kbhit()) //verifica se alguma tecla foi pressionada, caso contrario retorna 0
     {
         tecla = getch();
@@ -171,7 +177,7 @@ int p_s3_gas(int p)
 
     //deve ter 60ms de atraso
     //wait(15);
-    wait(16);
+
     return amostra;
 }
 
@@ -181,7 +187,7 @@ int p_s1_oleo(int p)
     //trecho para simular um disturbio no duto de gas;
     char tecla;
     int amostra=-1;
-
+    fflush(stdin);
     if(kbhit()) //verifica se alguma tecla foi pressionada, caso contrario retorna 0
     {
         tecla = getch();
@@ -230,7 +236,7 @@ int p_s2_oleo(int p)
 //trecho para simular um disturbio no duto de gas;
     char tecla;
     int amostra=-1;
-
+    fflush(stdin);
     if(kbhit()) //verifica se alguma tecla foi pressionada, caso contrario retorna 0
     {
         tecla = getch();
@@ -325,7 +331,7 @@ int poco(int p)
 {//trecho para simular um disturbio no duto de gas;
     char tecla;
     int amostra=-1;
-
+    fflush(stdin);
     if(kbhit()) //verifica se alguma tecla foi pressionada, caso contrario retorna 0
     {
         tecla = getch();
@@ -369,7 +375,7 @@ int poco(int p)
 
 void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo_stat1, bool oleo_stat2, bool oleo_stat3,int NUM)
 {
-    wait(500);
+    //wait(500);
     //wait(89);
     int p=0;
     if(NUM == 1)
@@ -393,7 +399,7 @@ void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo
         cout<<"INSTABILIDADE DETECTADA! POÇO DESLIGADO  ";
     }
     else
-        cout<<"                                                                    ";
+        cout<<"                                                        ";
 
     gotoxy(3,p+2);
     cout<<"| Sensor GAS   1 :   "<<gas_stat1<<"     |";
@@ -516,13 +522,18 @@ int main(int argc, char const *argv[])
         bool P1_gas_stat2 = p_s2_gas(1); // 35 ms
         bool P1_gas_stat3 = p_s3_gas(1); // 15 ms
         //somando
+        unsigned P1gas_init_time = clock();///captura o tempo de inicio ao aplicar a contramedida
         bool check_p1_gas = contramedida(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3);
+        unsigned P1gas_finish_time = clock();///captura o tempo de fim após aplicação da contramedida
 
         bool P1_oleo_stat1 = p_s1_oleo(1); // 55 ms
         bool P1_oleo_stat2 = p_s2_oleo(1); // 35 ms
         bool P1_oleo_stat3 = p_s3_oleo(1); // 15 ms
 
+        unsigned P1oleo_init_time = clock();///captura o tempo de inicio ao aplicar a contramedida
         bool check_p1_oleo = contramedida(P1_stat0,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3);
+        unsigned P1oleo_finish_time = clock();///captura o tempo de fim após aplicação da contramedida
+
 
         //Bloco do poço 2 Gas
         bool P2_stat0 = poco(2); // 75ms
@@ -530,13 +541,17 @@ int main(int argc, char const *argv[])
         bool P2_gas_stat2 = p_s2_gas(2); // 35 ms
         bool P2_gas_stat3 = p_s3_gas(2); // 15 ms
 
+        unsigned P2gas_init_time = clock();///captura o tempo de inicio ao aplicar a contramedida
         bool check_p2_gas = contramedida(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3);
+        unsigned P2gas_finish_time = clock();///captura o tempo de fim após aplicação da contramedida
 
         bool P2_oleo_stat1 = p_s1_oleo(2); // 55 ms
         bool P2_oleo_stat2 = p_s2_oleo(2); // 35 ms
         bool P2_oleo_stat3 = p_s3_oleo(2); // 15 ms
 
+        unsigned P2oleo_init_time = clock();///captura o tempo de inicio ao aplicar a contramedida
         bool check_p2_oleo = contramedida(P2_stat0,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3);
+        unsigned P2oleo_finish_time = clock();///captura o tempo de fim após aplicação da contramedida
 
         //Bloco do poço 3 Gas
         bool P3_stat0 = poco(3); // 75ms
@@ -544,13 +559,18 @@ int main(int argc, char const *argv[])
         bool P3_gas_stat2 = p_s2_gas(3); // 35 ms
         bool P3_gas_stat3 = p_s3_gas(3); // 15 ms
 
+        unsigned P3gas_init_time = clock();///captura o tempo de inicio ao aplicar a contramedida
         bool check_p3_gas = contramedida(P3_stat0,P3_gas_stat1,P3_gas_stat2,P3_gas_stat3);
+        unsigned P3gas_finish_time = clock();///captura o tempo de fim após aplicação da contramedida
 
         bool P3_oleo_stat1 = p_s1_oleo(3); // 55 ms
         bool P3_oleo_stat2 = p_s2_oleo(3); // 35 ms
         bool P3_oleo_stat3 = p_s3_oleo(3); // 15 ms
 
+        unsigned P3oleo_init_time = clock();///captura o tempo de inicio ao aplicar a contramedida
         bool check_p3_oleo = contramedida(P3_stat0,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3);
+        unsigned P3oleo_finish_time = clock();///captura o tempo de fim após aplicação da contramedida
+
 
         unsigned finish_time = clock(); // tempo depois de realizar as requisições dos sensores
 
@@ -569,6 +589,20 @@ int main(int argc, char const *argv[])
             cout<<"STATUS DO SISTEMA NORMAIS ";
         }
 
+        gotoxy(5,38);
+        cout<<"P1 Tempo contramedida: "<<(P1gas_finish_time-P1gas_init_time) + (P1oleo_finish_time-P1oleo_init_time) ; ///Tempo de contramedida para o poço 1
+        gotoxy(5,39);
+        cout<<"P2 Tempo contramedida: "<<(P2gas_finish_time-P2gas_init_time) + (P2oleo_finish_time-P2oleo_init_time) ; ///Tempo de contramedida para o poço 2
+        gotoxy(5,40);
+        cout<<"P3 Tempo contramedida: "<<(P3gas_finish_time-P3gas_init_time) + (P3oleo_finish_time-P3oleo_init_time) ; ///Tempo de contramedida para o poço 3
+
+        ///Tempo de contramedida Total
+        gotoxy(5,41);
+        cout<<"Tempo contramedida: "<<((P1gas_finish_time-P1gas_init_time) + (P1oleo_finish_time-P1oleo_init_time))+((P2gas_finish_time-P2gas_init_time) + (P2oleo_finish_time-P2oleo_init_time)) +((P3gas_finish_time-P3gas_init_time) + (P3oleo_finish_time-P3oleo_init_time)) ;
+
+
+
+        wait(500);
         display(P1_stat0,P1_gas_stat1,P1_gas_stat2,P1_gas_stat3,P1_oleo_stat1,P1_oleo_stat2,P1_oleo_stat3,1);
         display(P2_stat0,P2_gas_stat1,P2_gas_stat2,P2_gas_stat3,P2_oleo_stat1,P2_oleo_stat2,P2_oleo_stat3,2);
         display(P3_stat0,P3_gas_stat1,P3_gas_stat2,P3_gas_stat3,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3,3);
