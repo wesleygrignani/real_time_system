@@ -5,13 +5,13 @@
 
 using namespace std;
 
-void gotoxy(short a, short b)           //Introduction of gotoxy function//
+void gotoxy(short a, short b)           //Corpo da função gotoxy
 {
     COORD pos = {a,b};
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void wait(unsigned timeout)
+void wait(unsigned timeout) //Função de contagem de tempo do sistema
 {
     timeout += clock();
     while(clock() < timeout)
@@ -32,6 +32,12 @@ int p_s1_gas(int p)
         switch(tecla)
         {
         case 'q': //simular disturbio, detectação no sensor gas poço 1
+            if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
+                amostra = 1;
+            else
+                amostra = 0;
+            break;
+        case 'qw': //simular disturbio, detectação no sensor gas poço 1
             if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
                 amostra = 1;
             else
@@ -80,6 +86,13 @@ int p_s2_gas(int p)
         switch(tecla)
         {
         case 'w': //simular disturbio, detectação no sensor gas poço 1
+            if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
+                amostra = 1;
+            else
+                amostra = 0;
+            break;
+
+        case 'qw': //simular disturbio, detectação no sensor gas poço 1
             if(p == 1)//ativa somente se for a chamada do sensor gas poço 1
                 amostra = 1;
             else
@@ -380,7 +393,7 @@ void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo
         cout<<"INSTABILIDADE DETECTADA! POÇO DESLIGADO  ";
     }
     else
-        cout<<"                                                        ";
+        cout<<"                                                                    ";
 
     gotoxy(3,p+2);
     cout<<"| Sensor GAS   1 :   "<<gas_stat1<<"     |";
@@ -390,82 +403,95 @@ void display(bool stat0,bool gas_stat1, bool gas_stat2, bool gas_stat3,bool oleo
     }
     else if(stat0){
         gotoxy(32,p+2);
-        cout<<"FORA DE SERVIÇO!                                        ";
+        cout<<"FORA DE SERVIÇO!                                                    ";
     }
      else
-        cout<<"                                                        ";
+        cout<<"                                                                    ";
     gotoxy(3,p+3);
     cout<<"| Sensor GAS   2 :   "<<gas_stat2<<"     |";
     if(gas_stat2){
         gotoxy(32,p+3);
-        cout<<"INSTABILIDADE DETECTADA! PRESSÃO AJUSTADA PELO SISTEMA  ";
+        cout<<"INSTABILIDADE DETECTADA! CONTRAMEDIDA: AJUSTE DE PRESSÃO APLICADO   ";
     }
     else if(stat0){
         gotoxy(32,p+3);
-        cout<<"FORA DE SERVIÇO!                                        ";
+        cout<<"FORA DE SERVIÇO!                                                    ";
     }
      else
-        cout<<"                                                        ";
+        cout<<"                                                                    ";
 
     gotoxy(3,p+4);
     cout<<"| Sensor GAS   3 :   "<<gas_stat3<<"     |";
     if(gas_stat3){
         gotoxy(32,p+4);
-        cout<<"INSTABILIDADE DETECTADA! PRESSÃO AJUSTADA PELO SISTEMA  ";
+        cout<<"INSTABILIDADE DETECTADA! CONTRAMEDIDA: AJUSTE DE PRESSÃO APLICADO   ";
     }
     else if(stat0){
         gotoxy(32,p+4);
-        cout<<"FORA DE SERVIÇO!                                        ";
+        cout<<"FORA DE SERVIÇO!                                                    ";
     }
      else
-        cout<<"                                                        ";
+        cout<<"                                                                    ";
 
     gotoxy(3,p+5);
 
     cout<<"| Sensor OLEO  1 :   "<<oleo_stat1<<"     |";
     if(oleo_stat1){
         gotoxy(32,p+5);
-        cout<<"INSTABILIDADE DETECTADA! PRESSÃO AJUSTADA PELO SISTEMA  ";
+        cout<<"INSTABILIDADE DETECTADA! CONTRAMEDIDA: AJUSTE DE PRESSÃO APLICADO   ";
     }
     else if(stat0){
         gotoxy(32,p+5);
-        cout<<"FORA DE SERVIÇO!                                        ";
+        cout<<"FORA DE SERVIÇO!                                                    ";
     }
      else
-        cout<<"                                                        ";
+        cout<<"                                                                    ";
 
     gotoxy(3,p+6);
     cout<<"| Sensor OLEO  2 :   "<<oleo_stat2<<"     |";
     if(oleo_stat2){
         gotoxy(32,p+6);
-        cout<<"INSTABILIDADE DETECTADA! PRESSÃO AJUSTADA PELO SISTEMA  ";
+        cout<<"INSTABILIDADE DETECTADA! CONTRAMEDIDA: AJUSTE DE PRESSÃO APLICADO   ";
     }
     else if(stat0){
         gotoxy(32,p+6);
-        cout<<"FORA DE SERVIÇO!                                        ";
+        cout<<"FORA DE SERVIÇO!                                                    ";
     }
      else
-        cout<<"                                                        ";
+        cout<<"                                                                    ";
 
     gotoxy(3,p+7);
     cout<<"| Sensor OLEO  3 :   "<<oleo_stat3<<"     |";
     if(oleo_stat3){
         gotoxy(32,p+7);
-        cout<<"INSTABILIDADE DETECTADA! PRESSÃO AJUSTADA PELO SISTEMA  ";
+        cout<<"INSTABILIDADE DETECTADA! CONTRAMEDIDA: AJUSTE DE PRESSÃO APLICADO   ";
     }
     else if(stat0){
         gotoxy(32,p+7);
-        cout<<"FORA DE SERVIÇO!                                        ";
+        cout<<"FORA DE SERVIÇO!                                                    ";
     }
      else
-        cout<<"                                                        ";
+        cout<<"                                                                    ";
 }
 
 //Não sei se precisaria disso mas é uma sub rotina pra informar o sistema pra ajustar a pressão
 bool contramedida(bool s0,bool s1,bool s2,bool s3){
  bool check = false;
-    if(s0 || s1 || s2 || s3){
+    if(s0){
+        wait(300);
         check = true;
+    }
+    if(s1){
+        check = true;
+        wait(200);
+    }
+    if(s2){
+        check = true;
+        wait(200);
+    }
+    if(s3){
+        check = true;
+        wait(200);
     }
     //wait(20);
     return check;
@@ -527,6 +553,9 @@ int main(int argc, char const *argv[])
         bool check_p3_oleo = contramedida(P3_stat0,P3_oleo_stat1,P3_oleo_stat2,P3_oleo_stat3);
 
         unsigned finish_time = clock(); // tempo depois de realizar as requisições dos sensores
+
+        gotoxy(6,34);
+        cout<<"                                           ";
         gotoxy(6,34);
         cout<<"TEMPO DE EXECUÇÃO: "<<finish_time-init_time;
 
